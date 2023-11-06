@@ -8,7 +8,7 @@ import (
 const defaultTemplate = `[{{.Name}}]({{.URL}})
 {{with .Description}}{{.}}{{end}}
 {{range $i, $t := .Tracks}}
-{{inc $i}}. [{{$t.Name}}]({{$t.URL}}) - {{index $t.Artists 0}}
+{{inc $i}}. [{{$t.Name}}]({{$t.URL}}) - __{{index $t.Artists 0}}__
 {{end}}`
 
 var templatePath = flag.String("template", "", "output template's path")
