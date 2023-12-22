@@ -7,7 +7,7 @@ import (
 
 const defaultTemplate = `[{{.Name}}]({{.URL}})
 {{with .EstimatedCreationTime}}{{.Format "January 2006"}}{{end}}
-{{with .Description}}{{.}}{{end}}
+{{with .Description}}__{{.}}__{{end}}
 {{range $i, $t := .Tracks}}
 {{inc $i}}. [{{$t.Name}}]({{$t.URL}}) - __{{index $t.Artists 0}}__
 {{end}}`
