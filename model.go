@@ -14,10 +14,11 @@ type Track struct {
 }
 
 type Playlist struct {
-	Name        string
-	Description string
-	URL         string
-	Tracks      []Track
+	Name                  string
+	Description           string
+	URL                   string
+	EstimatedCreationTime time.Time
+	Tracks                []Track
 }
 
 func NewPlaylist(playlist *spotify.FullPlaylist) Playlist {
@@ -28,6 +29,8 @@ func NewPlaylist(playlist *spotify.FullPlaylist) Playlist {
 		Tracks:      nil,
 	}
 
+	var averageTimeUnix int64
+	count := 0
 	for _, t := range playlist.Tracks.Tracks {
 		track := Track{
 			Name:     t.Track.Name,
@@ -41,6 +44,16 @@ func NewPlaylist(playlist *spotify.FullPlaylist) Playlist {
 		}
 
 		p.Tracks = append(p.Tracks, track)
+
+		addedAt, err := time.Parse(time.RFC3339, t.AddedAt)
+		if err == nil {
+			averageTimeUnix += addedAt.Unix()
+			count++
+		}
+	}
+	if count > 0 {
+		averageTimeUnix /= int64(count)
+		p.EstimatedCreationTime = time.Unix(averageTimeUnix, 0)
 	}
 
 	return p
